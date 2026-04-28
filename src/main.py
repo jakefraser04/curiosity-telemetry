@@ -32,8 +32,11 @@ def main():
         print(f"\n--- Curiosity Live Report: {args.file} ---")
         
         health = analyze_health(data)
+        print(f"{'SENSOR':20} | {'AVG':>10} | {'MIN':>10} | {'MAX':>10}")
+        print("-" * 56)
+        
         for sensor, stats in health.items():
-            print(f"{sensor:20} | Avg: {stats['mean']:>10.2f}")
+            print(f"{sensor:20} | {stats['mean']:>10.2f} | {stats['min']:>10.2f} | {stats['max']:>10.2f}")
 
         if args.anomalies:
             # -130 dBm is the standard threshold for a weak signal in deep space
