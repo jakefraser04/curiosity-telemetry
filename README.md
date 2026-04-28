@@ -1,9 +1,13 @@
 # Curiosity Telemetry Parser
 
-A command-line interface (CLI) tool designed to process and analyze health telemetry from the Mars Science Laboratory (MSL) rover, Curiosity. This tool parses sensor data to provide health summaries and detect critical safety anomalies.
+A command-line interface (CLI) tool designed to process and analyze live communication and health telemetry from the Mars Science Laboratory (MSL) rover, Curiosity, via NASA's Deep Space Network (DSN).
 
 ## What it does
-This application ingests telemetry logs (currently supporting CSV format) containing rover sensor readings like battery temperature, power output, and signal strength. It calculates key performance metrics (mean, min, max) and flags readings that fall outside of safe operating limits, which is vital for maintaining the rover's longevity in the harsh Martian environment.
+This application connects to NASA's live Deep Space Network (DSN) feed to track active communications between Earth and the Curiosity rover. It features a robust 3-tier data pipeline to ensure the tool is functional regardless of Martian orbital position:
+
+1. **Live XML Parsing:** Ingests NASA's DSN XML stream to identify MSL signal strength and distance in real-time.
+2. **Persistent Caching:** If Curiosity is "below the horizon," the tool automatically retrieves the last successfully recorded data point from a local cache.
+3. **Simulated Fallback:** Provides a randomized statistical baseline for initial setup and stress-testing anomaly detection.
 
 ## Installation
 Ensure you have Python 3.10+ installed.
@@ -26,9 +30,9 @@ pip install -r requirements.txt
 ```
 
 ## Usage
-Run the tool by passing a telemetry file path. Use the --anomalies flag to trigger safety checks.
+Run the tool using the --fetch flag to pull live data directly from NASA, or provide a local CSV file path. Use the --anomalies flag to trigger safety checks.
 ```bash
-python src/main.py telemetry_sample.csv --anomalies
+python src/main.py --fetch --anomalies
 ```
 
 ## Examples

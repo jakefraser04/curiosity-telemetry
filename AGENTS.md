@@ -1,20 +1,21 @@
-AI Collaboration Log (AGENTS.md)
-Overview of AI Use
-I collaborated with Gemini (Google) to architect and troubleshoot a CLI application that parses Mars rover telemetry. The AI acted as a technical consultant for API integration and a debugging partner for environment-specific issues (Linux/GitHub Actions vs. Windows/Local).
+# AI Collaboration Log (AGENTS.md)
 
-Where AI Helped
-API Architecture: Provided the logic for connecting to NASA’s DSN (Deep Space Network) XML feed and parsing the complex tree structure into a usable CSV.
+## **Project Lead: Jake Fraser**
+**Collaborator:** Gemini (Google)
 
-CI/CD Troubleshooting: Resolved a "Process completed with exit code 5" error in GitHub Actions by identifying pathing issues and recommending the addition of __init__.py files and the python -m pytest command.
+## **Overview**
+I utilized Gemini as a technical consultant and pair-programmer to build a robust CLI tool that interfaces with NASA's Deep Space Network (DSN). My role was to define the project scope, make executive decisions on data fallback strategies, and lead the debugging process for environment-specific issues.
 
-Resiliency Logic: Drafted a fallback mechanism to handle real-world "line-of-sight" issues when the Curiosity rover is not actively transmitting to a DSN station.
+## **Where AI Helped**
+* **API Ingestion:** Provided the initial logic for parsing NASA’s DSN XML feed.
+* **Refactoring:** Assisted in modularizing the code into a professional `src/` and `tests/` structure.
+* **CI/CD Configuration:** Helped troubleshoot GitHub Actions pathing issues (exit code 5) by suggesting the use of `python -m pytest`.
 
-Where I Led
-Project Integrity: I steered the project back to the Curiosity (MSL) mission when technical hurdles made switching to an asteroid API tempting. I insisted on maintaining the original project scope to match the repository branding.
+## **Where I Led (Key Engineering Decisions)**
+* **The 3-Tier Data Strategy:** I directed the AI to implement a specific hierarchy for data reliability: **Live API -> Local Cache -> Randomized Simulation**. This ensures the tool is functional even when Mars is out of line-of-sight.
+* **Defensive Programming:** After encountering a `NoneType` error from the live NASA feed, I identified the need for a guard clause to handle empty `power` attributes, preventing application crashes during live transmissions.
+* **UX & Accessibility:** I made the call to remove Unicode emojis to ensure the CLI remains compatible with older Windows terminal encodings (CP1252), prioritizing broad user accessibility over aesthetics.
+* **Simulation Design:** I specified that simulated data should not be a static number, but a distribution of 10 records with random noise to better test the statistical analysis functions of the parser.
 
-Feature Specification: I defined the requirement for a --fetch flag and an --anomalies flag to ensure the tool felt like a professional utility rather than just a script.
-
-Logic Verification: I manually verified that the signal strength thresholds (-130 dBm) were scientifically appropriate for the Deep Space Network's operational limits.
-
-Key Learnings
-This project highlighted the gap between "perfect" code and "real-world" connectivity. Dealing with ConnectionResetError and 404s taught me that robust applications need built-in fallbacks. I also gained a much deeper understanding of the Python Module Search Path and how package imports function differently across different operating systems.
+## **Key Learnings**
+This project taught me that "real" data is messy. Building a tool that talks to a spacecraft millions of miles away requires more than just logic; it requires a strategy for handling connectivity gaps and hardware-specific limitations. I gained significant experience in state management and cross-platform Python deployment.
